@@ -1,0 +1,21 @@
+FROM golang:1.17-alpine AS build_base
+
+RUN apk add --no-cache git gcc sqlite musl-dev
+
+WORKDIR /tmp/go-k-app
+COPY go.mod .
+COPY go.sum .
+RUN go mod download
+
+COPY . .
+
+RUN CGO_ENABLED=0 go test -v
+
+RUN go build -o ./out/go-k-app .
+
+FROM alpine:latest
+
+RUN apk add ca-certificates
+COPY --from=build_base /tmp/go-k-app/out/go-k-app /app/go-k-app
+
+CMD [ "/app/go-k-app" ]
