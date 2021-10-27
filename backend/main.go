@@ -6,7 +6,7 @@ import (
 )
 
 var (
-	host = flag.String("h", "localhost", "Host to start web server")
+	host = flag.String("h", "0.0.0.0", "Host to start web server")
 	port = flag.Int("p", 3000, "port to access web server")
 )
 
